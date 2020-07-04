@@ -16,24 +16,22 @@ export class RegisterResolver {
 
     await user.save();
 
-    // TODO remove this check - added to restrict during testing
-    if (data.email === 'send@example.com') {
-      const link = await createConfirmEmailLink(
-        ctx.confirmUrl,
-        user.id,
-        ctx.redis
-      );
+    const link = await createConfirmEmailLink(
+      ctx.confirmUrl,
+      user.id,
+      ctx.redis
+    );
 
-      const mailData: EmailData = {
-        from: '"Mr. From" <from@example.com>',
-        to: `"Ms. To" <${data.email}>'`,
-        subject: 'Confirmation Email',
-        text: `please confirm your email by visiting ${link}`,
-        html: `please confirm your email by visiting <a href="${link}">${link}</a>`,
-      };
+    const mailData: EmailData = {
+      from: '"Mr. From" <from@example.com>',
+      to: `"Ms. To" <${data.email}>'`,
+      subject: 'Confirmation Email',
+      text: `please confirm your email by visiting ${link}`,
+      html: `please confirm your email by visiting <a href="${link}">${link}</a>`,
+    };
 
-      await sendEmail(mailData);
-    }
+    await sendEmail(mailData);
+
     return {
       id: user.id,
       email: user.email,
