@@ -5,5 +5,5 @@
 ormconfig.json
 dump.rdb
 .DS_Store
-backend/.env
+.env
 
