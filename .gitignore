@@ -1,9 +1,9 @@
 .idea/
 .vscode/
-node_modules/
-build/
+**/node_modules/
+**/build/
 ormconfig.json
 dump.rdb
 .DS_Store
-.env
+
 
