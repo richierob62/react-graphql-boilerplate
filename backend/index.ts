@@ -1,4 +1,5 @@
-import 'dotenv/config';
+require('dotenv').config({ path: '../.env' });
+
 import 'reflect-metadata';
 
 import startServer from './utils/server/start_server';
