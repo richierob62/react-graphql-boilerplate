@@ -26,7 +26,7 @@ export const CreateCrudResolverBase = <
     async create(
       @Arg('data', () => inputType) data: T,
       @Ctx() ctx: Context
-    ): Promise<Partial<V>> {
+    ): Promise<Partial<U>> {
       console.log(ctx ? '' : ''); // bc ctx not used in function
       const item = await entity.create(data).save();
       return item;
