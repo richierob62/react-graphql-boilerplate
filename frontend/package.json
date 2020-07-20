@@ -28,7 +28,9 @@
     "subscriptions-transport-ws": "^0.9.17"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.17.0",
     "@types/cookie": "^0.4.0",
+    "@types/graphql": "^14.5.0",
     "@types/react": "^16.9.43",
     "typescript": "^3.9.6"
   }

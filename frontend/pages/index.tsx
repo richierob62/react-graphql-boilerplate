@@ -1,8 +1,9 @@
 import * as React from 'react';
 
+import { Mutation, Query } from 'react-apollo';
+
 import Layout from '../components/Layout';
 import Link from 'next/link';
-import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 
 const IndexPage: React.FunctionComponent = () => {
@@ -17,17 +18,17 @@ const IndexPage: React.FunctionComponent = () => {
       <Mutation
         mutation={gql`
           mutation {
-            login(email: "test@test.com", password: "qqq") {
+            login(data: { email: "foo11@example.com", password: "1234567" }) {
               id
               firstName
               lastName
               email
-              name
+              confirmed
             }
           }
         `}
       >
-        {(mutate) => (
+        {(mutate: any) => (
           <button
             onClick={async () => {
               const response = await mutate();
@@ -35,6 +36,24 @@ const IndexPage: React.FunctionComponent = () => {
             }}
           >
             call login mutation
+          </button>
+        )}
+      </Mutation>
+      <Mutation
+        mutation={gql`
+          mutation {
+            logout
+          }
+        `}
+      >
+        {(mutate: any) => (
+          <button
+            onClick={async () => {
+              const response = await mutate();
+              console.log(response);
+            }}
+          >
+            logout
           </button>
         )}
       </Mutation>

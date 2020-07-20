@@ -136,7 +136,7 @@ const startServer = async (port: string) => {
     }),
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   const connection: Connection = await createTypeormConnection();
 

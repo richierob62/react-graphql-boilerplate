@@ -8,12 +8,12 @@ import { getDataFromTree } from 'react-apollo';
 import initApollo from './initApollo';
 import { isBrowser } from './isBrowser';
 
-function parseCookies(req?: any, options = {}) {
+const parseCookies = (req?: any, options = {}) => {
   return cookie.parse(
     req ? req.headers.cookie || '' : document.cookie,
     options
   );
-}
+};
 
 export default (App: any) => {
   return class WithData extends React.Component {
@@ -31,7 +31,7 @@ export default (App: any) => {
       const apollo = initApollo(
         {},
         {
-          getToken: () => parseCookies(req).qid,
+          getToken: () => parseCookies(req).rid,
         }
       );
 

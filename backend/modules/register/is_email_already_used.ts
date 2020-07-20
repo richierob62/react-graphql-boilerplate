@@ -16,8 +16,8 @@ export class EmailAlreadyUsedConstraint
   }
 }
 
-export function EmailAlreadyUsed(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+export const EmailAlreadyUsed = (validationOptions?: ValidationOptions) => {
+  return (object: Object, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
@@ -26,4 +26,4 @@ export function EmailAlreadyUsed(validationOptions?: ValidationOptions) {
       validator: EmailAlreadyUsedConstraint,
     });
   };
-}
+};

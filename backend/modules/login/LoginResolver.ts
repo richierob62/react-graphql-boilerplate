@@ -35,8 +35,8 @@ export class LoginResolver {
 
     req.session!.userId = user.id;
 
-    if (req.sessionID) {
-      await redis.lpush(`user_sid:${user.id}`, req.sessionID);
+    if (req.session!.userId) {
+      await redis.lpush(`user_sid:${user.id}`, req.session!.userId);
     }
 
     return user;
