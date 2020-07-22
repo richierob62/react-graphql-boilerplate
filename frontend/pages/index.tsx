@@ -1,21 +1,33 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  useCurrentUserLazyQuery,
+  useLoginMutation,
+  useLogoutMutation,
+} from '../generated/apolloComponents';
 
 import Layout from '../components/Layout';
 import Link from 'next/link';
-import { Mutation } from 'react-apollo';
-import { gql } from 'apollo-boost';
-import { useLoginMutation } from '../generated/apolloComponents';
 
 const IndexPage: React.FunctionComponent = () => {
-  const [login, { loading }] = useLoginMutation();
+  const [val, setVal] = useState('');
 
-  if (loading) {
-    return <div>Loading</div>;
-  }
+  const [login, { loading }] = useLoginMutation();
+  const [logout, { loading: loading_2 }] = useLogoutMutation();
+  const [currentUser, { data }] = useCurrentUserLazyQuery({
+    fetchPolicy: 'network-only',
+  });
+
+  const waiting = loading || loading_2;
+
+  const stringData = JSON.stringify(data, null, 2);
 
   return (
     <Layout title="Home | Next.js + TypeScript Example">
-      <h1>hello Next.js 👋</h1>
+      <p>{waiting ? 'Loading...' : 'All Done'}</p>
+
+      <pre style={{ border: '1px solid grey' }}>{val}</pre>
+
+      <pre style={{ border: '1px solid grey' }}>{stringData}</pre>
       <p>
         <Link href="/about">
           <a>About</a>
@@ -29,31 +41,31 @@ const IndexPage: React.FunctionComponent = () => {
             },
           });
           if (response?.data?.login) {
-            console.log(response.data.login);
+            setVal(JSON.stringify(response, null, 2));
           }
         }}
       >
         call login mutation
       </button>
 
-      <Mutation
-        mutation={gql`
-          mutation {
-            logout
+      <button
+        onClick={async () => {
+          const response = await logout({});
+          if (response?.data?.logout) {
+            setVal(JSON.stringify(response, null, 2));
           }
-        `}
+        }}
       >
-        {(mutate: any) => (
-          <button
-            onClick={async () => {
-              const response = await mutate();
-              console.log(response);
-            }}
-          >
-            logout
-          </button>
-        )}
-      </Mutation>
+        logout
+      </button>
+
+      <button
+        onClick={() => {
+          currentUser({});
+        }}
+      >
+        current user
+      </button>
     </Layout>
   );
 };
