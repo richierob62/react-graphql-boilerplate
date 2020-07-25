@@ -20,11 +20,13 @@ export class ForgotPasswordResolver {
     await User.update({ id: user.id }, { account_locked: true });
     await removeUserSessions(user.id, ctx.redis, ctx.res);
 
-    await createForgotPasswordEmailLink(
+    const link = await createForgotPasswordEmailLink(
       process.env.FRONT_END_DOMAIN as string,
       user.id,
       ctx.redis
     );
+
+    console.log(link);
 
     // TODO: send email
 

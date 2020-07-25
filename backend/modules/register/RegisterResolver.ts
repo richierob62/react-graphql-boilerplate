@@ -22,6 +22,8 @@ export class RegisterResolver {
       ctx.redis
     );
 
+    console.log(link);
+
     const mailData: EmailData = {
       from: '"Mr. From" <from@example.com>',
       to: `"Ms. To" <${data.email}>'`,
