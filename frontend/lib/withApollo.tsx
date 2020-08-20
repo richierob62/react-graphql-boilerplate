@@ -1,10 +1,10 @@
-import { ApolloClient, NormalizedCacheObject } from 'apollo-boost';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
 import cookie from 'cookie';
-import { getDataFromTree } from 'react-apollo';
+import { getDataFromTree } from '@apollo/react-ssr';
 import initApollo from './initApollo';
 import { isBrowser } from './isBrowser';
 
@@ -28,6 +28,7 @@ export default (App: any) => {
         router,
         ctx: { req, res },
       } = ctx;
+
       const apollo = initApollo(
         {},
         {

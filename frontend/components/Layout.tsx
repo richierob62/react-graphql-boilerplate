@@ -35,6 +35,14 @@ const Layout: React.FunctionComponent<Props> = ({
           <a>About</a>
         </Link>{' '}
         |{' '}
+        <Link href="/apollo-stuff">
+          <a>Apollo Stuff</a>
+        </Link>{' '}
+        |{' '}
+        <Link href="/register">
+          <a>register</a>
+        </Link>{' '}
+        |{' '}
       </nav>
     </header>
     {children}

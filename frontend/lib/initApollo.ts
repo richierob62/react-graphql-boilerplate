@@ -2,12 +2,12 @@ import {
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
-} from 'apollo-boost';
+  createHttpLink,
+} from '@apollo/client';
 
-import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import { isBrowser } from './isBrowser';
-import { setContext } from 'apollo-link-context';
+import { setContext } from '@apollo/link-context';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
@@ -20,6 +20,7 @@ interface Options {
   getToken: () => string;
 }
 
+// TODO: fix this
 const create = (initialState: any, { getToken }: Options) => {
   const httpLink = createHttpLink({
     uri: 'http://localhost:3001/graphql',
