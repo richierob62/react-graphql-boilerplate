@@ -1,9 +1,9 @@
 import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
 import { User } from '../../entity/User';
-import { RegisterInput } from './RegisterInput';
 import { sendEmail, EmailData } from '../../utils/mail/send_email';
 import { createConfirmEmailLink } from '../../utils/auth/create_confirm_email_link';
 import { Context } from '../../utils/server/resolver_types';
+import { RegisterInput } from '../types';
 
 @Resolver()
 export class RegisterResolver {
@@ -11,7 +11,7 @@ export class RegisterResolver {
   async register(
     @Arg('data') data: RegisterInput,
     @Ctx() ctx: Context
-  ): Promise<Partial<User>> {
+  ): Promise<User> {
     const user = User.create(data);
 
     await user.save();
@@ -22,11 +22,12 @@ export class RegisterResolver {
       ctx.redis
     );
 
+    // TODO: remove
     console.log(link);
 
     const mailData: EmailData = {
       from: '"Mr. From" <from@example.com>',
-      to: `"Ms. To" <${data.email}>'`,
+      to: `"${data.firstName || ''} ${data.lastName || ''}" <${data.email}>`,
       subject: 'Confirmation Email',
       text: `please confirm your email by visiting ${link}`,
       html: `please confirm your email by visiting <a href="${link}">${link}</a>`,
@@ -34,11 +35,6 @@ export class RegisterResolver {
 
     await sendEmail(mailData);
 
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
+    return user;
   }
 }

@@ -20,7 +20,6 @@ interface Options {
   getToken: () => string;
 }
 
-// TODO: fix this
 const create = (initialState: any, { getToken }: Options) => {
   const httpLink = createHttpLink({
     uri: 'http://localhost:3001/graphql',
@@ -47,16 +46,13 @@ const create = (initialState: any, { getToken }: Options) => {
 };
 
 const initApollo = (initialState: any, options: Options) => {
-  // Make sure to create a new client for every server-side request so that data
-  // isn't shared between connections (which would be bad)
+  // create new client if on server
   if (!isBrowser) {
     return create(initialState, options);
   }
 
-  // Reuse client on the client-side
-  if (!apolloClient) {
-    apolloClient = create(initialState, options);
-  }
+  // reuse client on the client-side
+  apolloClient = apolloClient || create(initialState, options);
 
   return apolloClient;
 };
