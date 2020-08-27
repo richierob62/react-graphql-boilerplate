@@ -43,6 +43,14 @@ const Layout: React.FunctionComponent<Props> = ({
           <a>register</a>
         </Link>{' '}
         |{' '}
+        <Link href="/static_props_page">
+          <a>static props page</a>
+        </Link>{' '}
+        |{' '}
+        <Link href="/server_side_rendered_page?abc=123">
+          <a>server side rendered page</a>
+        </Link>{' '}
+        |{' '}
       </nav>
     </header>
     {children}
