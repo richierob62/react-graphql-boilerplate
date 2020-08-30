@@ -18,39 +18,36 @@ const Layout: React.FunctionComponent<Props> = ({
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <header>
-      <nav>
+      <nav style={{ display: 'flex', flexWrap: 'wrap' }}>
         <Link href="/">
-          <a>Home</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>Home</a>
+        </Link>
         <Link href="/list-fc">
-          <a>List as Functional Component</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>List as Functional Component</a>
+        </Link>
         <Link href="/list-class">
-          <a>List As Class</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>List As Class</a>
+        </Link>
         <Link href="/about">
-          <a>About</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>About</a>
+        </Link>
         <Link href="/apollo-stuff">
-          <a>Apollo Stuff</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>Apollo Stuff</a>
+        </Link>
         <Link href="/register">
-          <a>register</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>register</a>
+        </Link>
         <Link href="/static_props_page">
-          <a>static props page</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>static props page</a>
+        </Link>
         <Link href="/server_side_rendered_page?abc=123">
-          <a>server side rendered page</a>
-        </Link>{' '}
-        |{' '}
+          <a style={{ padding: 10 }}>server side rendered page</a>
+        </Link>
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <Link key={i} href="/items/[id]" as={`/items/${i}`}>
+            <a style={{ padding: 10 }}>{`Dynamic Route ${i}`}</a>
+          </Link>
+        ))}
       </nav>
     </header>
     {children}
