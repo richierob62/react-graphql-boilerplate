@@ -1,15 +1,22 @@
 import * as React from 'react';
 
+import { GetServerSideProps } from 'next';
 import Layout from '../components/Layout';
 
-export async function getServerSideProps({ query }: any) {
+// If you don’t need to pre-render the data, then you should consider fetching data on the client side.
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query, req, res, params } = context;
+
+  console.log(req || res || params);
+
   return {
     props: {
       number: Math.floor(Math.random() * 1234567),
       query,
     },
   };
-}
+};
 
 export default ({ number, query }: any) => (
   <Layout title={'ssr page'}>
