@@ -1,9 +1,15 @@
 import * as React from 'react';
 
+import { GetStaticPaths } from 'next';
 import Layout from '../../components/Layout';
+import { useRouter } from 'next/router';
 
 const StaticRoutePage: React.FunctionComponent = ({ itemData }: any) => {
-  if (!itemData) return null;
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Layout title="Static Page - Dynamic Route">
@@ -23,15 +29,20 @@ const staticItemsList = [
   { id: 8, name: 'Item 8' },
 ];
 
-export function getStaticPaths() {
-  const paths = staticItemsList.map((i) => ({ params: { id: `${i.id}` } }));
+export const getStaticPaths: GetStaticPaths = async () => {
+  // pre-rendering only pages 1 and 2
+  const paths = [{ params: { id: '1' } }, { params: { id: '2' } }];
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
-}
+};
 
-export function getStaticProps({ params }: { params: { id: string } }) {
+export const getStaticProps = async ({
+  params,
+}: {
+  params: { id: string };
+}) => {
   const itemData = staticItemsList.filter(
     (i) => i.id === parseInt(params.id)
   )[0];
@@ -40,6 +51,6 @@ export function getStaticProps({ params }: { params: { id: string } }) {
       itemData,
     },
   };
-}
+};
 
 export default StaticRoutePage;
