@@ -1,16 +1,18 @@
 import * as React from 'react';
 
+import { GetStaticProps } from 'next';
 import Layout from '../components/Layout';
 import { getMarkdownData } from '../lib/parse_md';
 
-export function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const staticPageData = getMarkdownData();
   return {
     props: {
       staticPageData,
     },
+    revalidate: 1, // When a request comes in At most once every second
   };
-}
+};
 
 export default ({ staticPageData }: any) => {
   const formatedContents = (c: string) => {
