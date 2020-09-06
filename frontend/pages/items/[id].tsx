@@ -1,19 +1,23 @@
 import * as React from 'react';
 
-import { GetStaticPaths } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
+
 import Layout from '../../components/Layout';
 import { useRouter } from 'next/router';
 
 const StaticRoutePage: React.FunctionComponent = ({ itemData }: any) => {
   const router = useRouter();
 
-  if (router.isFallback) {
+  // This should not be necessary
+  if ((router && router.isFallback) || !itemData) {
     return <div>Loading...</div>;
   }
 
   return (
     <Layout title="Static Page - Dynamic Route">
-      <h2>{itemData.name}</h2>
+      <h2>
+        {router.asPath} => {itemData.name} 
+      </h2>
     </Layout>
   );
 };
@@ -38,11 +42,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async ({
-  params,
-}: {
-  params: { id: string };
-}) => {
+export const getStaticProps:GetStaticProps = async (context) => {
+
+  const {params}: any  = context
+
   const itemData = staticItemsList.filter(
     (i) => i.id === parseInt(params.id)
   )[0];

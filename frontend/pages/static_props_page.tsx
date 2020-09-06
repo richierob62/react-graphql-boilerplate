@@ -14,7 +14,7 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default ({ staticPageData }: any) => {
+const StaticPropsPage = ({ staticPageData }: any) => {
   const formatedContents = (c: string) => {
     const paragraphs = c.split('\n');
     return (
@@ -45,3 +45,5 @@ export default ({ staticPageData }: any) => {
     </Layout>
   );
 };
+
+export default StaticPropsPage;

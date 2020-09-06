@@ -43,6 +43,12 @@ const Layout: React.FunctionComponent<Props> = ({
         <Link href="/server_side_rendered_page?abc=123">
           <a style={{ padding: 10 }}>server side rendered page</a>
         </Link>
+        <Link href="/static_asset">
+          <a style={{ padding: 10 }}>static asset from public dir</a>
+        </Link>
+        <Link href="/env_vars">
+          <a style={{ padding: 10 }}>env vars</a>
+        </Link>
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <Link key={i} href="/items/[id]" as={`/items/${i}`}>
             <a style={{ padding: 10 }}>{`Dynamic Route ${i}`}</a>

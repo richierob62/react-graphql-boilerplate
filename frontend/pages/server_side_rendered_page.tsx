@@ -8,8 +8,6 @@ import Layout from '../components/Layout';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query, req, res, params } = context;
 
-  console.log(req || res || params);
-
   return {
     props: {
       number: Math.floor(Math.random() * 1234567),
@@ -18,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default ({ number, query }: any) => (
+const SSRPage = ({ number, query }: any) => (
   <Layout title={'ssr page'}>
     <br />
     <br />
@@ -27,3 +25,5 @@ export default ({ number, query }: any) => (
     <div>query: {JSON.stringify(query, null, 2)}</div>
   </Layout>
 );
+
+export default SSRPage;

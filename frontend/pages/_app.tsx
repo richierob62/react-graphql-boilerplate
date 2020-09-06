@@ -1,3 +1,5 @@
+import '../global_styles.css';
+
 import { ApolloProvider } from '@apollo/client';
 import App from 'next/app';
 import React from 'react';
@@ -6,9 +8,8 @@ import withApollo from '../lib/withApollo';
 
 const PageWrapper = styled.div`
   background-color: #e5e5c4;
-  height: 100vh;
   margin: -8px;
-  padding: 0;
+  padding: 40px;
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
