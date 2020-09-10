@@ -13,11 +13,19 @@ const StaticRoutePage: React.FunctionComponent = ({ itemData }: any) => {
     return <div>Loading...</div>;
   }
 
+  // pages/post/[pid].js => /post/abc?foo=bar => router.query => { "foo": "bar", "pid": "abc" }
+
+  // pages/post/[...slug].js => /post/a, but also /post/a/b, /post/a/b/c => { "slug": ["a", "b", "c"] }
+
+  // pages/post/[[...slug]].js => /post plus above
+
+  // router.push('/about')
+
+  // router.push('/?counter=10', undefined, { shallow: true }) => page doesn't change, no data fetching
+
   return (
     <Layout title="Static Page - Dynamic Route">
-      <h2>
-        {router.asPath} => {itemData.name} 
-      </h2>
+      <h2>{`${router.asPath} => ${itemData.name} `}</h2>
     </Layout>
   );
 };
@@ -42,9 +50,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps:GetStaticProps = async (context) => {
-
-  const {params}: any  = context
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { params }: any = context;
 
   const itemData = staticItemsList.filter(
     (i) => i.id === parseInt(params.id)

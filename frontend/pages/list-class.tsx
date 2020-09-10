@@ -1,7 +1,7 @@
 import IDataObject from '../interfaces';
 import Layout from '../components/Layout';
 import List from '../components/List';
-import { NextContext } from 'next';
+import { NextPageContext } from 'next';
 import React from 'react';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 class ListClass extends React.Component<Props> {
-  static async getInitialProps({ pathname }: NextContext) {
+  static async getInitialProps({ pathname }: NextPageContext) {
     // Example for including initial props in a Next.js page.
     // Don't forget to include the respective types for any
     // props passed into the component
