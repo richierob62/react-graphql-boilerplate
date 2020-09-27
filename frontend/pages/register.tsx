@@ -79,15 +79,10 @@ type RegistrationData = {
 };
 
 const Register = () => {
-  const [serverErrors, serServerErrors] = useState({});
   const [registered, setRegistered] = useState(false);
 
   const [register, { loading }] = useRegisterMutation({
     onCompleted: () => setRegistered(true),
-    onError: (err) => {
-      console.log(err);
-      serServerErrors(err);
-    },
   });
 
   const initialValues: RegistrationData = {
@@ -99,89 +94,106 @@ const Register = () => {
 
   const submitRegistration = async (
     values: RegistrationData,
-    { setSubmitting, resetForm }: FormikHelpers<RegistrationData>
+    { setSubmitting, resetForm, setErrors }: FormikHelpers<RegistrationData>
   ) => {
-    setSubmitting(true);
+    try {
+      setSubmitting(true);
 
-    await register({
-      variables: {
-        data: values,
-      },
-    });
-
+      await register({
+        variables: {
+          data: values,
+        },
+      });
+      resetForm();
+    } catch (err) {
+      const errors = err.graphQLErrors[0].extensions.exception.validationErrors;
+      if (errors) {
+        const formikErrors: { [key: string]: string } = {};
+        errors.forEach((e: any) => {
+          formikErrors[e.property] = Object.values(e.constraints)[0] as string;
+        });
+        setErrors(formikErrors);
+      }
+    }
     setSubmitting(false);
-    resetForm();
   };
 
-  return (
-    <Layout title="Register page">
-      <CONTAINER>
-        {!registered ? (
-          <Formik
-            onSubmit={submitRegistration}
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-          >
-            {(formikProps) => (
-              <Row className="bg-white py-5 justify-content-center">
-                <Col sm={8} md={6} lg={6}>
-                  <h1 className="text-center">Register</h1>
-
-                  <form onSubmit={formikProps.handleSubmit}>
-                    <LabeledTextInput
-                      fieldName={'firstName'}
-                      placeholder={'first name'}
-                      label={'First Name'}
-                      formikProps={formikProps}
-                    />
-                    <LabeledTextInput
-                      fieldName={'lastName'}
-                      placeholder={'last name'}
-                      label={'Last Name'}
-                      formikProps={formikProps}
-                    />
-                    <LabeledTextInput
-                      fieldName={'email'}
-                      placeholder={'email'}
-                      label={'Email'}
-                      formikProps={formikProps}
-                    />
-                    <LabeledTextInput
-                      type="password"
-                      fieldName={'password'}
-                      placeholder={'password'}
-                      label={'Password'}
-                      formikProps={formikProps}
-                    />
-
-                    <Button
-                      variant="success"
-                      type="submit"
-                      disabled={
-                        loading || Object.keys(formikProps.errors).length > 0
-                      }
-                    >
-                      {loading ? 'one sec...' : 'Register'}
-                    </Button>
-                  </form>
-
-                  <br />
-                  <small>
-                    Already have an account?&nbsp;
-                    <Link href="/login">
-                      <a>Login here</a>
-                    </Link>
-                  </small>
-                </Col>
-              </Row>
-            )}
-          </Formik>
-        ) : (
+  if (registered)
+    return (
+      <Layout title="Register page">
+        <CONTAINER>
           <p className="email-sent">
             An email has been sent to you. Please click on the link in the email
             to confirm your email address.
           </p>
-        )}
+        </CONTAINER>
+      </Layout>
+    );
+
+  return (
+    <Layout title="Register page">
+      <CONTAINER>
+        <Formik
+          onSubmit={submitRegistration}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        >
+          {(formikProps) => (
+            <Row className="bg-white py-5 justify-content-center">
+              <Col sm={8} md={6} lg={6}>
+                <h1 className="text-center">Register</h1>
+
+                <form onSubmit={formikProps.handleSubmit}>
+                  <LabeledTextInput
+                    fieldName={'firstName'}
+                    placeholder={'first name'}
+                    label={'First Name'}
+                    formikProps={formikProps}
+                  />
+                  <LabeledTextInput
+                    fieldName={'lastName'}
+                    placeholder={'last name'}
+                    label={'Last Name'}
+                    formikProps={formikProps}
+                  />
+                  <LabeledTextInput
+                    fieldName={'email'}
+                    placeholder={'email'}
+                    label={'Email'}
+                    formikProps={formikProps}
+                  />
+                  <LabeledTextInput
+                    type="password"
+                    fieldName={'password'}
+                    placeholder={'password'}
+                    label={'Password'}
+                    formikProps={formikProps}
+                  />
+
+                  <Button
+                    variant="success"
+                    type="submit"
+                    disabled={
+                      loading ||
+                      Object.keys(formikProps.errors).length > 0 ||
+                      formikProps.isSubmitting
+                    }
+                  >
+                    {loading ? 'one sec...' : 'Register'}
+                  </Button>
+                </form>
+
+                <br />
+                <small>
+                  Already have an account?&nbsp;
+                  <Link href="/login">
+                    <a>Login here</a>
+                  </Link>
+                </small>
+              </Col>
+            </Row>
+          )}
+        </Formik>
       </CONTAINER>
     </Layout>
   );
