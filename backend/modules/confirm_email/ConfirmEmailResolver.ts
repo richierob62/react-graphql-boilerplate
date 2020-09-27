@@ -1,5 +1,5 @@
 import { Mutation, Resolver, Ctx, Arg } from 'type-graphql';
-import { Context } from '../../utils/server/resolver_types';
+import { Context } from '../../types/resolver_types';
 import { AuthenticationError } from 'apollo-server-express';
 import { User } from '../../entity/User';
 

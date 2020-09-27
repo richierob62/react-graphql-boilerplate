@@ -10,6 +10,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type User = {
@@ -26,6 +28,30 @@ export type User = {
   instagram_id?: Maybe<Scalars['String']>;
   fullName: Scalars['String'];
 };
+
+export type LoginError = {
+  __typename?: 'LoginError';
+  name: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  user?: Maybe<User>;
+  errors?: Maybe<Array<LoginError>>;
+};
+
+export type NotificationPayload = {
+  __typename?: 'NotificationPayload';
+  message: Scalars['String'];
+};
+
+export type Notification = {
+  __typename?: 'Notification';
+  message: Scalars['String'];
+  date: Scalars['DateTime'];
+};
+
 
 export type EmailInput = {
   email: Scalars['String'];
@@ -59,7 +85,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   confirmEmail: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
-  login?: Maybe<User>;
+  login: LoginResponse;
   logout: Scalars['Boolean'];
   register: User;
   resetPassword: Scalars['Boolean'];
@@ -88,6 +114,11 @@ export type MutationRegisterArgs = {
 
 export type MutationResetPasswordArgs = {
   data: PasswordResetInput;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  loginNotification: Notification;
 };
 
 export type ConfirmEmailMutationVariables = Exact<{
@@ -128,10 +159,16 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { login?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmed'>
-  )> }
+  & { login: (
+    { __typename?: 'LoginResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmed'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'LoginError' }
+      & Pick<LoginError, 'name' | 'message'>
+    )>> }
+  ) }
 );
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
@@ -264,11 +301,17 @@ export type ForgotPasswordMutationOptions = ApolloReactCommon.BaseMutationOption
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
-    id
-    firstName
-    lastName
-    email
-    confirmed
+    user {
+      id
+      firstName
+      lastName
+      email
+      confirmed
+    }
+    errors {
+      name
+      message
+    }
   }
 }
     `;

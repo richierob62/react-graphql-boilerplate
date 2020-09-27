@@ -1,13 +1,15 @@
 import {
+  LoginInput,
+  PasswordResetInput,
+  RegisterInput,
+} from '../../types/type-graphql_types';
+import {
   loginMutation,
   registerMutation,
   resetPasswordMutation,
 } from '../../graphql/queries';
 
 import { Connection } from 'typeorm';
-import { LoginInput } from '../login/login_input';
-import { PasswordResetInput } from './PasswordResetInput';
-import { RegisterInput } from '../register/RegisterInput';
 import { User } from '../../entity/User';
 import { createForgotPasswordEmailLink } from '../../utils/auth/create_forgot_password_email_link';
 import faker from 'faker';

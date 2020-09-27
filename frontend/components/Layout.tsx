@@ -52,6 +52,9 @@ const Layout: React.FunctionComponent<Props> = ({
         <Link href="/dynamic">
           <a style={{ padding: 10 }}>dynamically loaded component</a>
         </Link>
+        <Link href="/oauth">
+          <a style={{ padding: 10 }}>oauth</a>
+        </Link>
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <Link key={i} href="/items/[id]" as={`/items/${i}`}>
             <a style={{ padding: 10 }}>{`Dynamic Route ${i}`}</a>

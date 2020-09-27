@@ -2,8 +2,8 @@ import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
 import { User } from '../../entity/User';
 import { sendEmail, EmailData } from '../../utils/mail/send_email';
 import { createConfirmEmailLink } from '../../utils/auth/create_confirm_email_link';
-import { Context } from '../../utils/server/resolver_types';
-import { RegisterInput } from '../types';
+import { Context } from '../../types/resolver_types';
+import { RegisterInput } from '../../types/type-graphql_types';
 
 @Resolver()
 export class RegisterResolver {
@@ -22,11 +22,8 @@ export class RegisterResolver {
       ctx.redis
     );
 
-    // TODO: remove
-    console.log(link);
-
     const mailData: EmailData = {
-      from: '"Mr. From" <from@example.com>',
+      from: '"From" <from@example.com>',
       to: `"${data.firstName || ''} ${data.lastName || ''}" <${data.email}>`,
       subject: 'Confirmation Email',
       text: `please confirm your email by visiting ${link}`,

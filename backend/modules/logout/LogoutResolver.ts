@@ -1,5 +1,5 @@
 import { Mutation, Resolver, Ctx } from 'type-graphql';
-import { Context } from '../../utils/server/resolver_types';
+import { Context } from '../../types/resolver_types';
 import { removeUserSessions } from '../../utils/auth/remove_users_sessions';
 
 @Resolver()

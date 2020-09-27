@@ -2,10 +2,10 @@ import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
 import { User } from '../../entity/User';
 // import { sendEmail, EmailData } from '../../utils/mail/send_email';
 // import { createConfirmEmailLink } from '../../utils/auth/create_confirm_email_link';
-import { Context } from '../../utils/server/resolver_types';
+import { Context } from '../../types/resolver_types';
 import { removeUserSessions } from '../../utils/auth/remove_users_sessions';
 import { createForgotPasswordEmailLink } from '../../utils/auth/create_forgot_password_email_link';
-import { EmailInput } from '../register/EmailInput';
+import { EmailInput } from '../../types/type-graphql_types';
 
 @Resolver()
 export class ForgotPasswordResolver {

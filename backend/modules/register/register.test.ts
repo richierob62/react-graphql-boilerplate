@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { RegisterInput } from './RegisterInput';
+import { RegisterInput } from '../../types/type-graphql_types';
 import { User } from '../../entity/User';
 import faker from 'faker';
 import gqlCall from '../../utils/tests/gql_call';

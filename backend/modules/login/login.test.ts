@@ -1,8 +1,7 @@
+import { LoginInput, RegisterInput } from '../../types/type-graphql_types';
 import { loginMutation, registerMutation } from '../../graphql/queries';
 
 import { Connection } from 'typeorm';
-import { LoginInput } from './login_input';
-import { RegisterInput } from '../register/RegisterInput';
 import { User } from '../../entity/User';
 import faker from 'faker';
 import gqlCall from '../../utils/tests/gql_call';

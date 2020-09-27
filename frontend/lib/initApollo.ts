@@ -42,6 +42,8 @@ const create = (initialState: any, { getToken }: Options) => {
     ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
     link: authLink.concat(httpLink),
     cache: new InMemoryCache().restore(initialState || {}),
+    // when ready to add local state management
+    // cache: new InMemoryCache(typePolicies).restore(initialState || {}),
   });
 };
 

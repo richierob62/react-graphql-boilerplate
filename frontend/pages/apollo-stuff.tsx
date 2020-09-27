@@ -30,7 +30,7 @@ export default function ApolloStuff() {
   const stringData = JSON.stringify(data, null, 2);
   return (
     <Layout title="Apollo Stuff">
-      <p>{loading ? 'Loading...' : 'All Done'}</p>
+      <p>{loading ? 'Loading...' : ''}</p>
 
       <pre style={{ border: '1px solid grey' }}>{val}</pre>
 
@@ -78,7 +78,7 @@ export default function ApolloStuff() {
           currentUser({});
         }}
       >
-        current user
+        current user (lazy query)
       </button>
 
       <button

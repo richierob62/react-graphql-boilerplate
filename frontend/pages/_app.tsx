@@ -1,29 +1,29 @@
-import '../global_styles.css';
+import '../global_styles.scss';
 
 import { ApolloProvider } from '@apollo/client';
 import App from 'next/app';
+import { CSSProperties } from 'react';
 import React from 'react';
-import styled from 'styled-components';
 import withApollo from '../lib/withApollo';
 
-const PageWrapper = styled.div`
-  background-color: #e5e5c4;
-  margin: -8px;
-  padding: 40px;
-  font-size: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+const pageWrapperStyle: CSSProperties = {
+  backgroundColor: '#e5e5c4',
+  margin: '8px',
+  padding: '40px',
+  fontSize: '1.5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
 
 class PageWithApolloProvider extends App<any> {
   render() {
     const { Component, pageProps, apolloClient } = this.props;
     return (
       <ApolloProvider client={apolloClient}>
-        <PageWrapper>
+        <div style={pageWrapperStyle}>
           <Component {...pageProps} />
-        </PageWrapper>
+        </div>
       </ApolloProvider>
     );
   }

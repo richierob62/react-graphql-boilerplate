@@ -1,15 +1,20 @@
 import { User } from '../../entity/User';
 import bcrypt from 'bcrypt';
-import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
-import { Context } from '../../utils/server/resolver_types';
-import { LoginResponse, LoginInput } from '../types';
+import { Mutation, Resolver, Arg, Ctx, PubSub, Publisher } from 'type-graphql';
+import { Context } from '../../types/resolver_types';
+import {
+  LoginResponse,
+  LoginInput,
+  NotificationPayload,
+} from '../../types/type-graphql_types';
 
 @Resolver()
 export class LoginResolver {
   @Mutation(() => LoginResponse)
   async login(
     @Arg('data') data: LoginInput,
-    @Ctx() { req, redis }: Context
+    @Ctx() { req, redis }: Context,
+    @PubSub('LOGIN') publish: Publisher<NotificationPayload>
   ): Promise<LoginResponse> {
     const user = await User.findOne({ where: { email: data.email } });
 
@@ -65,6 +70,9 @@ export class LoginResolver {
       req.session.userId = user.id;
       await redis.lpush(`user_sid:${user.id}`, req.session.userId);
     }
+
+    const payload: NotificationPayload = { message: `${user.email} logged in` };
+    await publish(payload);
 
     return { user };
   }

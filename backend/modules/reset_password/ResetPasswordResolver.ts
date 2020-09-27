@@ -1,7 +1,7 @@
 import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
-import { Context } from '../../utils/server/resolver_types';
-import { PasswordResetInput } from './PasswordResetInput';
+import { Context } from '../../types/resolver_types';
 import { User } from '../../entity/User';
+import { PasswordResetInput } from '../../types/type-graphql_types';
 
 @Resolver()
 export class ResetPasswordResolver {
