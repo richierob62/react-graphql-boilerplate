@@ -2,35 +2,21 @@ import * as yup from 'yup';
 
 import { Button, Col, Row } from 'react-bootstrap';
 import { Formik, FormikHelpers } from 'formik';
-import React, { useState } from 'react';
 
 import { LabeledTextInput } from '../lib/labeled_text_input';
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import React from 'react';
 import styled from 'styled-components';
-import { useRegisterMutation } from '../generated/apolloComponents';
+import { useLoginMutation } from '../generated/apolloComponents';
 
 // Schema for yup
 const validationSchema = yup.object().shape({
-  firstName: yup
-    .string()
-    .min(2, '*First Name must have at least 2 characters')
-    .max(100, "*First Name can't be longer than 100 characters")
-    .required('*First Name is required'),
-  lastName: yup
-    .string()
-    .min(2, '*Last Name must have at least 2 characters')
-    .max(100, "*Last Name can't be longer than 100 characters")
-    .required('*Last Name is required'),
   email: yup
     .string()
-    .email('*Must be a valid email address')
-    .max(100, '*Email must be less than 100 characters')
-    .required('*Email is required'),
-  password: yup
-    .string()
-    .required('*Password required')
-    .min(6, '*Password must be at least 6 characters'),
+    .email('*Enter your email address')
+    .required('*Enter your email address'),
+  password: yup.string().required('*Enter your password'),
 });
 
 const CONTAINER = styled.div`
@@ -65,41 +51,31 @@ const CONTAINER = styled.div`
     font-size: 0.9rem;
     color: #159491;
   }
-
-  .email-sent {
-    padding: 30px;
-  }
 `;
 
-type RegistrationData = {
+type LoginData = {
   email: string;
-  firstName?: string;
-  lastName?: string;
   password: string;
 };
 
-const Register = () => {
-  const [registered, setRegistered] = useState(false);
-
-  const [register, { loading }] = useRegisterMutation({
-    onCompleted: () => setRegistered(true),
+const Login = () => {
+  const [login, { loading }] = useLoginMutation({
+    onCompleted: () => {},
   });
 
-  const initialValues: RegistrationData = {
+  const initialValues: LoginData = {
     email: '',
-    firstName: '',
-    lastName: '',
     password: '',
   };
 
-  const submitRegistration = async (
-    values: RegistrationData,
-    { setSubmitting, resetForm, setErrors }: FormikHelpers<RegistrationData>
+  const submitLogin = async (
+    values: LoginData,
+    { setSubmitting, resetForm, setErrors }: FormikHelpers<LoginData>
   ) => {
     try {
       setSubmitting(true);
 
-      await register({
+      await login({
         variables: {
           data: values,
         },
@@ -118,44 +94,20 @@ const Register = () => {
     setSubmitting(false);
   };
 
-  if (registered)
-    return (
-      <Layout title="Register page">
-        <CONTAINER>
-          <p className="email-sent">
-            An email has been sent to you. Please click on the link in the email
-            to confirm your email address.
-          </p>
-        </CONTAINER>
-      </Layout>
-    );
-
   return (
-    <Layout title="Register">
+    <Layout title="Login">
       <CONTAINER>
         <Formik
-          onSubmit={submitRegistration}
+          onSubmit={submitLogin}
           initialValues={initialValues}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
             <Row className="bg-white py-5 justify-content-center">
               <Col sm={8} md={6} lg={6}>
-                <h1 className="text-center">Register</h1>
+                <h1 className="text-center">Login</h1>
 
                 <form onSubmit={formikProps.handleSubmit}>
-                  <LabeledTextInput
-                    fieldName={'firstName'}
-                    placeholder={'first name'}
-                    label={'First Name'}
-                    formikProps={formikProps}
-                  />
-                  <LabeledTextInput
-                    fieldName={'lastName'}
-                    placeholder={'last name'}
-                    label={'Last Name'}
-                    formikProps={formikProps}
-                  />
                   <LabeledTextInput
                     fieldName={'email'}
                     placeholder={'email'}
@@ -179,15 +131,15 @@ const Register = () => {
                       formikProps.isSubmitting
                     }
                   >
-                    {loading ? 'one sec...' : 'Register'}
+                    {loading ? 'one sec...' : 'Login'}
                   </Button>
                 </form>
 
                 <br />
                 <small>
-                  Already have an account?&nbsp;
-                  <Link href="/login">
-                    <a>Login here</a>
+                  Don't have an account?&nbsp;
+                  <Link href="/register">
+                    <a>Register here</a>
                   </Link>
                 </small>
               </Col>
@@ -199,4 +151,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
