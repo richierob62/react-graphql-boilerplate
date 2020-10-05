@@ -27,7 +27,7 @@ export class PasswordMustValidateConstraint
 }
 
 export const PasswordMustValidate = (
-  email: string,
+  constraintName: string,
   validationOptions?: ValidationOptions
 ) => {
   return (object: Object, propertyName: string) => {
@@ -35,7 +35,7 @@ export const PasswordMustValidate = (
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [email],
+      constraints: [constraintName],
       validator: PasswordMustValidateConstraint,
     });
   };

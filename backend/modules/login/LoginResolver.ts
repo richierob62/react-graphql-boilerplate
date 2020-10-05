@@ -17,27 +17,6 @@ export class LoginResolver {
   ): Promise<LoginResponse> {
     const user = await User.findOne({ where: { email: data.email } });
 
-    // TODO: confirmed & locked
-    // if (!user.confirmed)
-    //   return {
-    //     errors: [
-    //       {
-    //         name: 'authentication',
-    //         message: 'Please confirm your email address (see email sent)',
-    //       },
-    //     ],
-    //   };
-
-    // if (user.account_locked)
-    //   return {
-    //     errors: [
-    //       {
-    //         name: 'authentication',
-    //         message: 'Your account has been locked',
-    //       },
-    //     ],
-    //   };
-
     if (req.session) {
       req.session.userId = user!.id;
       await redis.lpush(`user_sid:${user!.id}`, req.session.userId);

@@ -1,7 +1,9 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 
+import { AccountIsUnlocked } from '../custom_validators/account_is_unlocked';
 import { EmailAlreadyUsed } from '../custom_validators/email_already_used';
+import { EmailIsConfirmed } from '../custom_validators/email_is_confirmed';
 import { EmailMustExist } from '../custom_validators/email_must_exist';
 import { PasswordMustExist } from '../custom_validators/password_must_exist';
 import { PasswordMustValidate } from '../custom_validators/password_must_validate';
@@ -15,6 +17,12 @@ export class LoginInput {
   @IsEmail({}, { message: 'Please enter your email address' })
   @EmailMustExist({ message: 'Not recognizing that email...' })
   @PasswordMustExist({ message: 'You may have logged in using social media' })
+  @EmailIsConfirmed({
+    message: 'Please confirm your email address (see email sent)',
+  })
+  @AccountIsUnlocked({
+    message: 'Your account has been temporarily locked.  Check your email.',
+  })
   email: string;
 
   @Field()
