@@ -13,7 +13,7 @@ export class EmailIsConfirmedConstraint
   async validate(email: string): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
 
-    return user ? user.confirmed : false;
+    return user ? user.confirmed : true;
   }
 }
 

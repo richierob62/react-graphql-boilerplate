@@ -13,7 +13,7 @@ export class AccountIsUnlockedConstraint
   async validate(email: string): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
 
-    return user ? !user.account_locked : false;
+    return user ? !user.account_locked : true;
   }
 }
 

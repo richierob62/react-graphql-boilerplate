@@ -19,6 +19,13 @@ const Layout: React.FunctionComponent<Props> = ({
     </Head>
     <header>
       <nav style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <Link href="/register">
+          <a style={{ padding: 10 }}>register</a>
+        </Link>
+        <Link href="/login">
+          <a style={{ padding: 10 }}>login</a>
+        </Link>
+
         <Link href="/">
           <a style={{ padding: 10 }}>Home</a>
         </Link>
@@ -33,9 +40,6 @@ const Layout: React.FunctionComponent<Props> = ({
         </Link>
         <Link href="/apollo-stuff">
           <a style={{ padding: 10 }}>Apollo Stuff</a>
-        </Link>
-        <Link href="/register">
-          <a style={{ padding: 10 }}>register</a>
         </Link>
         <Link href="/static_props_page">
           <a style={{ padding: 10 }}>static props page</a>

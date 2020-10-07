@@ -6,6 +6,7 @@ import {
   registerDecorator,
 } from 'class-validator';
 
+import { LoginInput } from '../types/type-graphql_types';
 import { User } from '../entity/User';
 import bcrypt from 'bcrypt';
 
@@ -16,13 +17,12 @@ export class PasswordMustValidateConstraint
     password: string,
     args: ValidationArguments
   ): Promise<boolean> {
-    const email = (args.object as any)['email'];
-
+    const email = (args.object as LoginInput).email;
     const user = await User.findOne({ where: { email } });
 
-    const validPassword = await bcrypt.compare(password, user!.password!);
+    if (!user) return true; // there is another constraint that handles valid email
 
-    return !!validPassword;
+    return await bcrypt.compare(password, user.password!);
   }
 }
 

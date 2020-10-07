@@ -83,6 +83,7 @@ const Login = () => {
       resetForm();
     } catch (err) {
       const errors = err.graphQLErrors[0].extensions.exception.validationErrors;
+
       if (errors) {
         const formikErrors: { [key: string]: string } = {};
         errors.forEach((e: any) => {

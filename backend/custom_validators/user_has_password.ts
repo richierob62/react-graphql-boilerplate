@@ -8,22 +8,21 @@ import {
 import { User } from '../entity/User';
 
 @ValidatorConstraint({ async: true })
-export class PasswordMustExistConstraint
-  implements ValidatorConstraintInterface {
+export class UserHasPasswordConstraint implements ValidatorConstraintInterface {
   async validate(email: string): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
-    return !!user?.password;
+    return user ? !!user.password : true;
   }
 }
 
-export const PasswordMustExist = (validationOptions?: ValidationOptions) => {
+export const UserHasPassword = (validationOptions?: ValidationOptions) => {
   return (object: Object, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: PasswordMustExistConstraint,
+      validator: UserHasPasswordConstraint,
     });
   };
 };
