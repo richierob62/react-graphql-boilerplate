@@ -11,7 +11,9 @@ export class ConfirmEmailResolver {
     @Ctx() ctx: Context
   ): Promise<boolean> {
     const userId = await ctx.redis.get(token);
-    if (!userId) throw new AuthenticationError('invalid or expired token');
+    if (!userId) {
+      throw new AuthenticationError('invalid or expired token');
+    }
 
     try {
       await User.update({ id: parseInt(userId) }, { confirmed: true });

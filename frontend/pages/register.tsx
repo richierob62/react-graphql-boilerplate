@@ -2,13 +2,14 @@ import * as yup from 'yup';
 
 import { Button, Col, Row } from 'react-bootstrap';
 import { Formik, FormikHelpers } from 'formik';
-import React, { useState } from 'react';
 
 import { LabeledTextInput } from '../lib/labeled_text_input';
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import React from 'react';
 import styled from 'styled-components';
 import { useRegisterMutation } from '../generated/apolloComponents';
+import { useRouter } from 'next/router';
 
 // Schema for yup
 const validationSchema = yup.object().shape({
@@ -79,10 +80,10 @@ type RegistrationData = {
 };
 
 const Register = () => {
-  const [registered, setRegistered] = useState(false);
+  const router = useRouter();
 
   const [register, { loading }] = useRegisterMutation({
-    onCompleted: () => setRegistered(true),
+    onCompleted: () => router.push('/confirm'),
   });
 
   const initialValues: RegistrationData = {
@@ -117,18 +118,6 @@ const Register = () => {
     }
     setSubmitting(false);
   };
-
-  if (registered)
-    return (
-      <Layout title="Register page">
-        <CONTAINER>
-          <p className="email-sent">
-            An email has been sent to you. Please click on the link in the email
-            to confirm your email address.
-          </p>
-        </CONTAINER>
-      </Layout>
-    );
 
   return (
     <Layout title="Register">
