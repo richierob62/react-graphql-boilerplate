@@ -5,32 +5,16 @@ import { Formik, FormikHelpers } from 'formik';
 
 import { LabeledTextInput } from '../lib/labeled_text_input';
 import Layout from '../components/Layout';
-import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { useRegisterMutation } from '../generated/apolloComponents';
+import { useForgotPasswordMutation } from '../generated/apolloComponents';
 
 // Schema for yup
 const validationSchema = yup.object().shape({
-  firstName: yup
-    .string()
-    .min(2, '*First Name must have at least 2 characters')
-    .max(100, "*First Name can't be longer than 100 characters")
-    .required('*First Name is required'),
-  lastName: yup
-    .string()
-    .min(2, '*Last Name must have at least 2 characters')
-    .max(100, "*Last Name can't be longer than 100 characters")
-    .required('*Last Name is required'),
   email: yup
     .string()
-    .email('*Must be a valid email address')
-    .max(100, '*Email must be less than 100 characters')
-    .required('*Email is required'),
-  password: yup
-    .string()
-    .required('*Password required')
-    .min(6, '*Password must be at least 6 characters'),
+    .email('*Enter your email address')
+    .required('*Enter your email address'),
 });
 
 const CONTAINER = styled.div`
@@ -65,40 +49,30 @@ const CONTAINER = styled.div`
     font-size: 0.9rem;
     color: #159491;
   }
-
-  .email-sent {
-    padding: 30px;
-  }
 `;
 
-type RegistrationData = {
+type ForgotPasswordData = {
   email: string;
-  firstName?: string;
-  lastName?: string;
-  password: string;
 };
 
-const Register = () => {
+const ForgotPassword = () => {
 
-  const [register, { loading }] = useRegisterMutation({
+  const [forgotPassword, { loading }] = useForgotPasswordMutation({
     onCompleted: () => {},
-  });
+    });
 
-  const initialValues: RegistrationData = {
+  const initialValues: ForgotPasswordData = {
     email: '',
-    firstName: '',
-    lastName: '',
-    password: '',
   };
 
-  const submitRegistration = async (
-    values: RegistrationData,
-    { setSubmitting, resetForm, setErrors }: FormikHelpers<RegistrationData>
+  const submitForgotPassword = async (
+    values: ForgotPasswordData,
+    { setSubmitting, resetForm, setErrors }: FormikHelpers<ForgotPasswordData>
   ) => {
     try {
       setSubmitting(true);
 
-      await register({
+      await forgotPassword({
         variables: {
           data: values,
         },
@@ -106,6 +80,7 @@ const Register = () => {
       resetForm();
     } catch (err) {
       const errors = err.graphQLErrors[0].extensions.exception.validationErrors;
+
       if (errors) {
         const formikErrors: { [key: string]: string } = {};
         errors.forEach((e: any) => {
@@ -118,42 +93,23 @@ const Register = () => {
   };
 
   return (
-    <Layout title="Register">
+    <Layout title="Forgot Password">
       <CONTAINER>
         <Formik
-          onSubmit={submitRegistration}
+          onSubmit={submitForgotPassword}
           initialValues={initialValues}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
             <Row className="bg-white py-5 justify-content-center">
               <Col sm={8} md={6} lg={6}>
-                <h1 className="text-center">Register</h1>
+                <h1 className="text-center">ForgotPassword</h1>
 
                 <form onSubmit={formikProps.handleSubmit}>
-                  <LabeledTextInput
-                    fieldName={'firstName'}
-                    placeholder={'first name'}
-                    label={'First Name'}
-                    formikProps={formikProps}
-                  />
-                  <LabeledTextInput
-                    fieldName={'lastName'}
-                    placeholder={'last name'}
-                    label={'Last Name'}
-                    formikProps={formikProps}
-                  />
                   <LabeledTextInput
                     fieldName={'email'}
                     placeholder={'email'}
                     label={'Email'}
-                    formikProps={formikProps}
-                  />
-                  <LabeledTextInput
-                    type="password"
-                    fieldName={'password'}
-                    placeholder={'password'}
-                    label={'Password'}
                     formikProps={formikProps}
                   />
 
@@ -166,17 +122,9 @@ const Register = () => {
                       formikProps.isSubmitting
                     }
                   >
-                    {loading ? 'one sec...' : 'Register'}
+                    {loading ? 'one sec...' : 'Reset Password'}
                   </Button>
                 </form>
-
-                <br />
-                <small>
-                  Already have an account?&nbsp;
-                  <Link href="/login">
-                    <a>Login here</a>
-                  </Link>
-                </small>
               </Col>
             </Row>
           )}
@@ -186,4 +134,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ForgotPassword;

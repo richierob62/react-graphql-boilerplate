@@ -25,6 +25,9 @@ const Layout: React.FunctionComponent<Props> = ({
         <Link href="/login">
           <a style={{ padding: 10 }}>login</a>
         </Link>
+        <Link href="/forgot_password">
+          <a style={{ padding: 10 }}>forgot password</a>
+        </Link>
 
         <Link href="/">
           <a style={{ padding: 10 }}>Home</a>

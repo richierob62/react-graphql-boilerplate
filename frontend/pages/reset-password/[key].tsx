@@ -3,16 +3,17 @@ import * as yup from 'yup';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Formik, FormikHelpers } from 'formik';
 
-import { LabeledTextInput } from '../lib/labeled_text_input';
-import Layout from '../components/Layout';
+import { LabeledTextInput } from '../../lib/labeled_text_input';
+import Layout from '../../components/Layout';
 import React from 'react';
 import styled from 'styled-components';
-import { useConfirmEmailMutation } from '../generated/apolloComponents';
-import { useRouter } from 'next/router';
+import { useResetPasswordMutation } from '../../generated/apolloComponents';
+import { useRouter } from 'next/router'
 
 // Schema for yup
 const validationSchema = yup.object().shape({
-  token: yup.string().required('*Token from email'),
+  key: yup.string().required('*Token from email'),
+  password: yup.string().required('*Enter your new password'),
 });
 
 const CONTAINER = styled.div`
@@ -49,56 +50,78 @@ const CONTAINER = styled.div`
   }
 `;
 
-type ConfirmEmailData = {
-  token: string;
+type ResetPasswordData = {
+  key: string;
+  password: string;
 };
 
-const ConfirmEmail = () => {
+const ResetPassword = () => {
+
   const router = useRouter();
 
-  const [confirm, { loading }] = useConfirmEmailMutation({
-    onCompleted: () => router.push('/login'),
-  });
+  const key: string = router.query?.key as string
 
-  const initialValues: ConfirmEmailData = {
-    token: '',
+  const [reset, { loading }] = useResetPasswordMutation({
+    onCompleted: () => router.push('/login'),
+    });
+
+  const initialValues: ResetPasswordData = {
+    key,
+    password: '',
   };
 
-  const submitConfirmEmail = async (
-    values: ConfirmEmailData,
-    { setSubmitting, resetForm, setErrors }: FormikHelpers<ConfirmEmailData>
+  const submitResetPassword = async (
+    values: ResetPasswordData,
+    { setSubmitting, resetForm, setErrors }: FormikHelpers<ResetPasswordData>
   ) => {
     try {
       setSubmitting(true);
 
-      await confirm({
-        variables: values,
+      await reset({
+        variables: {
+          data: values,
+        },
       });
       resetForm();
     } catch (err) {
-      setErrors({ token: 'Invalid or expired token' });
+      const errors = err.graphQLErrors[0].extensions.exception.validationErrors;
+
+      if (errors) {
+        const formikErrors: { [key: string]: string } = {};
+        errors.forEach((e: any) => {
+          formikErrors[e.property] = Object.values(e.constraints)[0] as string;
+        });
+        setErrors(formikErrors);
+      }
     }
     setSubmitting(false);
   };
 
   return (
-    <Layout title="Confirm Email">
+    <Layout title="ResetPassword">
       <CONTAINER>
         <Formik
-          onSubmit={submitConfirmEmail}
+          onSubmit={submitResetPassword}
           initialValues={initialValues}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
             <Row className="bg-white py-5 justify-content-center">
               <Col sm={8} md={6} lg={6}>
-                <h1 className="text-center">Confirm Email</h1>
+                <h1 className="text-center">ResetPassword</h1>
 
                 <form onSubmit={formikProps.handleSubmit}>
                   <LabeledTextInput
-                    fieldName={'token'}
-                    placeholder={'token'}
-                    label={'Token'}
+                    fieldName={'key'}
+                    placeholder={'key'}
+                    label={'Key'}
+                    formikProps={formikProps}
+                  />
+                  <LabeledTextInput
+                    type="password"
+                    fieldName={'password'}
+                    placeholder={'password'}
+                    label={'New Password'}
                     formikProps={formikProps}
                   />
 
@@ -111,7 +134,7 @@ const ConfirmEmail = () => {
                       formikProps.isSubmitting
                     }
                   >
-                    {loading ? 'one sec...' : 'Confirm Email'}
+                    {loading ? 'one sec...' : 'Reset Password'}
                   </Button>
                 </form>
               </Col>
@@ -123,4 +146,4 @@ const ConfirmEmail = () => {
   );
 };
 
-export default ConfirmEmail;
+export default ResetPassword;

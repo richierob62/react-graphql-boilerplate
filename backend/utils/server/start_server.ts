@@ -132,7 +132,7 @@ const startServer = async (port: string) => {
       req,
       res,
       redis,
-      confirmUrl: req.protocol + '://' + process.env.FRONT_END_DOMAIN,
+      confirmUrl: process.env.FRONT_END_DOMAIN,
     }),
   });
 
