@@ -9,6 +9,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useLoginMutation } from '../generated/apolloComponents';
+import { useRouter } from 'next/router';
 
 // Schema for yup
 const validationSchema = yup.object().shape({
@@ -59,8 +60,10 @@ type LoginData = {
 };
 
 const Login = () => {
+  const router = useRouter();
+
   const [login, { loading }] = useLoginMutation({
-    onCompleted: () => {},
+    onCompleted: () => router.push('/'),
   });
 
   const initialValues: LoginData = {

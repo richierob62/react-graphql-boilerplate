@@ -1,15 +1,11 @@
 import Layout from '../components/Layout';
-import Link from 'next/link';
+import MainPage from '../components/MainPage';
 import React from 'react';
 
 const IndexPage: React.FunctionComponent = () => {
   return (
     <Layout title="Next/TypeScript">
-      <p>
-        <Link href="/about">
-          <a>About</a>
-        </Link>
-      </p>
+      <MainPage />
     </Layout>
   );
 };

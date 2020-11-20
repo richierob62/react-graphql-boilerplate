@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Head from 'next/head';
 import Link from 'next/link';
+import { Logout } from './Logout';
 
 type Props = {
   title?: string;
@@ -19,6 +20,9 @@ const Layout: React.FunctionComponent<Props> = ({
     </Head>
     <header>
       <nav style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <Link href="/">
+          <a style={{ padding: 10 }}>Home</a>
+        </Link>
         <Link href="/register">
           <a style={{ padding: 10 }}>register</a>
         </Link>
@@ -28,10 +32,8 @@ const Layout: React.FunctionComponent<Props> = ({
         <Link href="/forgot_password">
           <a style={{ padding: 10 }}>forgot password</a>
         </Link>
+        <Logout />
 
-        <Link href="/">
-          <a style={{ padding: 10 }}>Home</a>
-        </Link>
         <Link href="/list-fc">
           <a style={{ padding: 10 }}>List as Functional Component</a>
         </Link>
