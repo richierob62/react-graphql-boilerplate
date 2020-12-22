@@ -4,16 +4,14 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinColumn,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
 import properCase from '../utils/proper_case';
-import { Photo } from './Photo';
-import { Profile } from './Profile';
 import bcrypt from 'bcrypt';
+import { Post } from './Post'
+import { Vote } from './Vote'
 
 @ObjectType()
 @Entity()
@@ -66,16 +64,15 @@ export class User extends BaseEntity {
   fullName(@Root() parent: User): string {
     const first = properCase(parent.firstName || '').trim();
     const last = properCase(parent.lastName || '').trim();
-    return first + (first && ' ') + last;
+    return (first || '') + (last ? ` ${last}` : '');
   }
 
   // Relations
-  @OneToOne(() => Profile, { cascade: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'profile_id' })
-  profile: Profile;
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
-  @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[];
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 
   // Actions
   @BeforeUpdate()
