@@ -27,13 +27,15 @@ export class Post extends BaseEntity {
   @Column({ type: 'text',  nullable: true })
   body: string | null;
 
-  // Relations
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
+  @Field(() => [Comment])
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
+  @Field(() => [Vote])
   @OneToMany(() => Vote, (vote) => vote.post)
   votes: Vote[];
   

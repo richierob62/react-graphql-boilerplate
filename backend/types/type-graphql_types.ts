@@ -3,9 +3,9 @@ import { IsEmail, MaxLength, MinLength } from 'class-validator';
 
 import { AccountIsUnlocked } from '../custom_validators/account_is_unlocked';
 import { EmailAlreadyUsed } from '../custom_validators/email_already_used';
-import { EmailIsConfirmed } from '../custom_validators/email_is_confirmed';
 import { EmailMustExist } from '../custom_validators/email_must_exist';
 import { PasswordMustValidate } from '../custom_validators/password_must_validate';
+import { Post } from '../entity/Post'
 import { User } from '../entity/User';
 import { UserHasPassword } from '../custom_validators/user_has_password';
 
@@ -17,9 +17,6 @@ export class LoginInput {
   @IsEmail({}, { message: 'Please enter your email address' })
   @EmailMustExist({ message: 'Not recognizing that email...' })
   @UserHasPassword({ message: 'You may have logged in using social media' })
-  @EmailIsConfirmed({
-    message: 'Please confirm your email address (see email sent)',
-  })
   @AccountIsUnlocked({
     message: 'Your account has been temporarily locked.  Check your email.',
   })
@@ -67,6 +64,33 @@ export class PasswordResetInput {
   key: string;
 }
 
+@InputType()
+export class PostInput implements Partial<Post> {
+  @Field()
+  @MinLength(3, { message: 'Minimum 3 characters' })
+  title: string;
+
+  @Field()
+  body: string;
+}
+
+@InputType()
+export class PostUpdateInput implements Partial<Post> {
+
+  @Field()
+  id: number;
+
+  @Field({nullable: true})
+  @MinLength(3, { message: 'Minimum 3 characters' })
+  title: string;
+
+  @Field({nullable: true})
+  body: string;
+}
+
+
+
+
 // Responses
 // ======================================================================================================
 
@@ -78,6 +102,13 @@ export class LoginResponse {
   @Field(() => [LoginError], { nullable: true })
   errors?: LoginError[];
 }
+
+@ObjectType()
+export class PostResponse {
+  @Field(() => Post, { nullable: true })
+  post?: Post;
+}
+
 
 // Errors
 // ======================================================================================================

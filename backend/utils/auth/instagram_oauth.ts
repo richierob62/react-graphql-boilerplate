@@ -10,7 +10,6 @@ const strategy = (connection: Connection) =>
       callbackURL: 'https://localhost:3001/auth/instagram/callback',
     },
     async (_, __, profile, cb) => {
-      console.log(profile);
 
       const { id, emails, name } = profile;
       const email = emails ? emails[0].value : null;

@@ -29,13 +29,14 @@ const startServer = async (port: string) => {
   // -----------------------------------------------------------------------
   const SessionRedisStore = connectRedis(session);
 
+
   app.use(
     session({
       name: process.env.SESSION_NAME,
       secret: process.env.SESSION_SECRET!,
       store: new SessionRedisStore({ client: redis, prefix: 'sess:' }),
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

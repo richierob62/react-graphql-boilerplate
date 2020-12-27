@@ -6,7 +6,7 @@ export const isAuthenticated: MiddlewareFn<Context> = async (
   { context },
   next
 ) => {
-  if (!context.req.session!.userId)
+  if (!context.req.session?.userId)
     throw new AuthenticationError('not authorized');
 
   return next();
