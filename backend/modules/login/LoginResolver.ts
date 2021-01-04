@@ -6,10 +6,18 @@ import {
   LoginInput,
 } from '../../types/type-graphql_types';
 import { emailIsConfirmed } from '../../middleware/email_is_confirmed'
+import { accountIsUnlocked } from '../../middleware/account_is_unlocked'
+import { userHasPassword } from '../../middleware/user_has_password'
+import { emailExists } from '../../middleware/email_exists'
+import { passwordValidates } from '../../middleware/password_validates'
 
 @Resolver()
 export class LoginResolver {
+  @UseMiddleware(emailExists)
+  @UseMiddleware(userHasPassword)
   @UseMiddleware(emailIsConfirmed)
+  @UseMiddleware(accountIsUnlocked)
+  @UseMiddleware(passwordValidates)
   @Mutation(() => LoginResponse)
   async login(
     @Arg('data') data: LoginInput,

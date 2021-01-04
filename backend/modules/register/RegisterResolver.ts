@@ -1,12 +1,14 @@
-import { Mutation, Resolver, Arg, Ctx } from 'type-graphql';
+import { Mutation, Resolver, Arg, Ctx, UseMiddleware } from 'type-graphql';
 import { User } from '../../entity/User';
 import { sendEmail, EmailData } from '../../utils/mail/send_email';
 import { createConfirmEmailLink } from '../../utils/auth/create_confirm_email_link';
 import { Context } from '../../types/resolver_types';
 import { RegisterInput } from '../../types/type-graphql_types';
+import { emailDoesntExist } from '../../middleware/email_doesnt_exist';
 
 @Resolver()
 export class RegisterResolver {
+  @UseMiddleware(emailDoesntExist)
   @Mutation(() => User)
   async register(
     @Arg('data') data: RegisterInput,
