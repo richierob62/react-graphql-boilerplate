@@ -10,8 +10,9 @@ import {
 import { Field, ID, ObjectType, Root } from 'type-graphql';
 import properCase from '../utils/proper_case';
 import bcrypt from 'bcrypt';
-import { Post } from './Post'
-import { Vote } from './Vote'
+import { Post } from './Post';
+import { Vote } from './Vote';
+import { Comment } from './Comment';
 
 @ObjectType()
 @Entity()
@@ -35,27 +36,21 @@ export class User extends BaseEntity {
   @Column('text', { nullable: true })
   password: string | null;
 
-  @Field(() => Boolean)
   @Column({ type: 'boolean', default: false })
   confirmed: boolean;
 
-  @Field(() => Boolean)
   @Column({ type: 'boolean', default: false })
   account_locked: boolean;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: 'varchar', length: '255', nullable: true })
   twitter_id: string | null;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: 'varchar', length: '255', nullable: true })
   facebook_id: string | null;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: 'varchar', length: '255', nullable: true })
   google_id: string | null;
 
-  @Field(() => String, { nullable: true })
   @Column({ type: 'varchar', length: '255', nullable: true })
   instagram_id: string | null;
 
@@ -68,11 +63,17 @@ export class User extends BaseEntity {
   }
 
   // Relations
+  @Field(() => [Post])
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
+  @Field(() => [Vote])
   @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];
+
+  @Field(() => [Comment])
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   // Actions
   @BeforeUpdate()

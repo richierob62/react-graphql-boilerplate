@@ -94,42 +94,6 @@ export class CommentUpdateInput implements Partial<Comment> {
   body: string;
 }
 
-// Responses
-// ======================================================================================================
-
-@ObjectType()
-export class LoginResponse {
-  @Field(() => User, { nullable: true })
-  user?: User;
-
-  @Field(() => [LoginError], { nullable: true })
-  errors?: LoginError[];
-}
-
-@ObjectType()
-export class PostResponse {
-  @Field(() => Post, { nullable: true })
-  post?: Post;
-}
-
-@ObjectType()
-export class CommentResponse {
-  @Field(() => Comment, { nullable: true })
-  comment?: Comment;
-}
-
-// Errors
-// ======================================================================================================
-
-@ObjectType()
-export class LoginError {
-  @Field()
-  name: string;
-
-  @Field()
-  message: string;
-}
-
 // Subscriptions
 // ======================================================================================================
 
