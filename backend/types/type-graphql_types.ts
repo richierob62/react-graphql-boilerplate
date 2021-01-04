@@ -1,7 +1,8 @@
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 
-import { Post } from '../entity/Post'
+import { Comment } from '../entity/Comment';
+import { Post } from '../entity/Post';
 import { User } from '../entity/User';
 
 // Input Types
@@ -64,20 +65,34 @@ export class PostInput implements Partial<Post> {
 
 @InputType()
 export class PostUpdateInput implements Partial<Post> {
-
   @Field()
   id: number;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   @MinLength(3, { message: 'Minimum 3 characters' })
   title: string;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   body: string;
 }
 
+@InputType()
+export class CommentInput implements Partial<Comment> {
+  @Field()
+  postId: number;
 
+  @Field()
+  body: string;
+}
 
+@InputType()
+export class CommentUpdateInput implements Partial<Comment> {
+  @Field()
+  id: number;
+
+  @Field({ nullable: true })
+  body: string;
+}
 
 // Responses
 // ======================================================================================================
@@ -97,6 +112,11 @@ export class PostResponse {
   post?: Post;
 }
 
+@ObjectType()
+export class CommentResponse {
+  @Field(() => Comment, { nullable: true })
+  comment?: Comment;
+}
 
 // Errors
 // ======================================================================================================
